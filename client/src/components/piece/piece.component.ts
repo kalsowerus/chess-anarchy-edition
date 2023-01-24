@@ -19,7 +19,7 @@ export class PieceComponent {
 
   public getImage$(): Observable<string> {
     return this.pieceSetService.selectedPieceSet$.pipe(
-      map(pieceSet => `${pieceSet.path}/${this.piece?.getImageCode()}.svg`)
+      map(pieceSet => `./${pieceSet.path}/${this.piece?.getImageCode()}.svg`)
     );
   }
 
