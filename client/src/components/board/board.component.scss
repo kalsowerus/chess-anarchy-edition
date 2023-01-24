@@ -1,0 +1,143 @@
+$coordinate-font-size: 20cqh;
+$margin: 5cqh;
+
+:host {
+  display: block;
+  height: 100%;
+  container-type: size;
+}
+
+.wrapper {
+  display: flex;
+  container-type: size;
+  height: min(100cqw - 10rem, 100cqh);
+  width: min(100cqw, 100cqh + 10rem);
+}
+
+.buttons {
+  margin-left: 1rem;
+  flex: 0 0 auto;
+}
+
+.board {
+  display: flex;
+  position: relative;
+  flex: 0 1 min(100cqh, 100cqw);
+  aspect-ratio: 1;
+}
+
+.column {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.square {
+  flex: 1;
+  aspect-ratio: 1;
+  container-type: size;
+  position: relative;
+
+  // light
+  background-color: #DDD;
+
+  .rank {
+    font-size: $coordinate-font-size;
+    position: absolute;
+    top: $margin;
+    left: $margin;
+  }
+
+  .file {
+    font-size: $coordinate-font-size;
+    line-height: $coordinate-font-size;
+    position: absolute;
+    bottom: $margin;
+    right: $margin;
+  }
+
+  // dark
+  &.dark {
+    background-color: #CA8;
+  }
+
+  // highlight
+  .highlight {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    &.moved {
+      background-color: rgba(32, 180, 32, 0.3);
+    }
+  }
+
+  .legal-move {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    left: 10%;
+    top: 10%;
+    border: 5cqh solid rgba(128, 128, 128, 0.5);
+    border-radius: 50%;
+  }
+}
+
+.drag-preview {
+  aspect-ratio: 1;
+  pointer-events: none;
+  position: fixed;
+
+  .preview-piece {
+    position: relative;
+    top: -100%;
+    left: -50%;
+  }
+}
+
+.promotion-popup {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .promotions {
+    background-color: white;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    .promotion-button:hover {
+      background-color: firebrick;;
+    }
+  }
+}
+
+// flipped board
+.board.flipped {
+  flex-direction: row-reverse;
+
+  .column {
+    flex-direction: column;
+  }
+
+  .rank {
+    top: initial;
+    right: $margin;
+    bottom: $margin;
+    left: initial;
+  }
+
+  .file {
+    top: $margin;
+    left: $margin;
+    bottom: initial;
+    right: initial;
+  }
+}

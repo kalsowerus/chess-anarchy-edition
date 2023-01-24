@@ -1,0 +1,58 @@
+<div class="wrapper">
+  <div
+    class="board"
+    [class.flipped]="this.boardFlipped$ | async"
+    (contextmenu)="preventDefault($event)"
+    (mouseleave)="cancelDragging()"
+    (mousemove)="onMouseMove($event)">
+    <div
+      *ngFor="let x of range(0, (width$ | async) ?? 0)"
+      class="column">
+      <div
+        *ngFor="let y of range(0, (height$ | async) ?? 0)"
+        class="square"
+        [class.dark]="(x+y) % 2 === 0"
+        (mousedown)="preventDefault($event)"
+        (mouseup)="stopDragging(x, y)">
+        <div *ngIf="x === 0" class="rank">{{getRank(y)}}</div>
+        <div *ngIf="y === 0" class="file">{{getFile(x)}}</div>
+        <div
+          *ngIf="getSquareHighlight(x, y) | async as highlight"
+          [class]="highlight"
+          class="highlight"></div>
+        <app-piece
+          *ngIf="(getPiece$(x, y) | async) as piece"
+          [piece]="piece"
+          (mousedown)="startDragging(x, y, piece)"></app-piece>
+        <div *ngIf="isLegalMove(x, y) | async" class="legal-move"></div>
+      </div>
+    </div>
+    <div *ngIf="showPromotionPopup$ | async" class="promotion-popup">
+      <div class="promotions">
+        <div
+          *ngFor="let piece of (promotionPieces$ | async) ?? []"
+          [style.width]="this.previewSize$ | async"
+          (click)="promoteTo(piece)"
+          class="promotion-button">
+          <app-piece [piece]="piece"></app-piece>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="(draggingPiece$ | async) as draggingPiece"
+      [style.width]="this.previewSize$ | async"
+      [style.top]="(mousePosition$ | async)?.y + 'px'"
+      [style.left]="(mousePosition$ | async)?.x + 'px'"
+      class="drag-preview">
+      <app-piece [piece]="draggingPiece" class="preview-piece"></app-piece>
+    </div>
+  </div>
+  <div class="buttons">
+    <button type="button" (click)="flipBoard()">Flip board</button>
+    <div class="moves-wrapper">
+      <ol>
+        <li *ngFor="let turn of (moveHistory$ | async)">{{turn[0]}} {{turn[1]}}</li>
+      </ol>
+    </div>
+  </div>
+</div>
